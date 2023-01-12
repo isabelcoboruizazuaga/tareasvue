@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script src="https://kit.fontawesome.com/ba0ac8d1c6.js" crossorigin="anonymous"></script>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<style>
+    li {
+        display: flex;
+        flex-direction: column;
+
+        border: 1px solid
+    }
+
+    li.completada h2 {
+        text-decoration: line-through;
+    }
+
+    #numTareasPendientes {
+        display: flex;
+    }
+
+    .tarea_main {
+        display: flex;
+        align-items: center;
+    }
+
+    .tarea_prioridad {
+        display: flex;
+    }
+
+    .baja {
+        background-color: green;
+    }
+
+    .media {
+        background-color: blue;
+    }
+
+    .alta {
+        background-color: red;
+    }
+
+    .grey {
+        background-color: grey;
+
+    }
+</style>
+
+<body>
+    <header>
+        <h1>Ejercicio Vue.js- Isabel Cobo</h1>
+    </header>
+    <main id="main">
+        <section id="insert">
+            <input type="text" name="textoNota" id="textoNota" placeholder="¿Qué quieres recordar?"
+                @keyup.enter="nuevaNota" v-model="texto">
+            <input type="text" name="textoFiltro" id="textoNota" placeholder="Filtrar por título" v-model="campoFiltro">
+            <div>Selected: {{ selected }}</div>
+
+            <select v-model="selected" @select="ordenarPorPrioridad">
+                <option disabled value="">Please select one</option>
+                <option>Low</option>
+                <option>Medium</option>
+                <option>High</option>
+            </select>
+        </section>
+        <hr>
+        <section id="tareas">
+            <div id="numTareasPendientes">
+                <p id="pendientes"> {{tareasPendientes}} tareas pendientes de un total de {{muestraTareasTotales()}}</p>
+                <p id="borrarCompletadas" @click="borrarCompletadas()"> Borrar tareas completadas</p>
+            </div>
+            <hr>
+            <div id="listaTareas">
+                <ul>
+                    <li v-for="nota in filtrarElementos" v-bind:class="{completada:nota.isCompletada}"
+                        :key="nota.codigoNota">
+                        <div class="tarea_main">
+                            <i class="fa-regular fa-circle-check" v-if="nota.isCompletada" @click="unCheck(nota)"></i>
+                            <i class="fa-regular fa-circle" @click="check(nota)" v-else></i>
+                            <h2>{{nota.titulo}}</h2>
+                            <i class="fa-solid fa-circle-minus" @click="borrar(nota)"></i>
+                        </div>
+                        <div class="tarea_prioridad">
+                            <p>Prioridad: </p>
+                            <button :class="{baja:nota.prioridad==1}" @click="changePriority(nota,1)">Low</button>
+                            <button :class="{media:nota.prioridad==2}" @click="changePriority(nota,2)">Medium</button>
+                            <button :class="{alta:nota.prioridad==3}" @click="changePriority(nota,3)">High</button>
+                            <p>Añadido {{nota.fechaCreada}}</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="madeBy">
+            <p>Desarrollado por "{{madeBy}}"</p>
+            <p>Código disponible en <a href="#">GitHub</a></p>
+        </section>
+    </main>
+
+</body>
+
+<script src='vue.js'></script>
+
+</html>
