@@ -1,3 +1,27 @@
+const arrayNotas = [
+    {
+        codigoNota: 0,
+        titulo: "Hacer compra",
+        prioridad: 1,
+        fechaCreada: new Date(2011, 4, 14, 20, 21, 22),
+        isCompletada: false
+    },
+    {
+        codigoNota: 1,
+        titulo: "Recoger regalos",
+        prioridad: 2,
+        fechaCreada: new Date(),
+        isCompletada: false
+    },
+    {
+        codigoNota: 2,
+        titulo: "Revisar correo",
+        prioridad: 3,
+        fechaCreada: new Date(),
+        isCompletada: true
+    }
+]
+
 const { createApp } = Vue
 
 createApp({
@@ -7,30 +31,9 @@ createApp({
             verEntrada: true,
             campoFiltro: "",
             texto: "",
-            selected: "",
-            notas: [
-                {
-                    codigoNota: 0,
-                    titulo: "Hacer compra",
-                    prioridad: 1,
-                    fechaCreada: new Date(2011, 4, 14, 20, 21, 22),
-                    isCompletada: false
-                },
-                {
-                    codigoNota: 1,
-                    titulo: "Recoger regalos",
-                    prioridad: 2,
-                    fechaCreada: new Date(),
-                    isCompletada: false
-                },
-                {
-                    codigoNota: 2,
-                    titulo: "Revisar correo",
-                    prioridad: 3,
-                    fechaCreada: new Date(),
-                    isCompletada: true
-                }
-            ],
+            prioSelected: "",
+            arrayFiltrado: arrayNotas,
+            notas: arrayNotas,
             madeBy: "Isabel Cobo"
         }
     },
@@ -42,7 +45,6 @@ createApp({
             this.verEntrada = !this.verEntrada;
         },
         nuevaNota() {
-            console.log(this.texto);
             this.notas.push(
                 {
                     codigoNota: this.notas.length - 1,
@@ -61,8 +63,7 @@ createApp({
         },
         unCheck(nota) {
             this.changeCheck(nota, false);
-        },
-        changeCheck(nota, checked) {
+        },changeCheck(nota, checked) {
             this.notas = this.notas.map(not => {
                 if (not == nota) {
                     return {
@@ -95,21 +96,10 @@ createApp({
             completadas.forEach(completada => {
                 this.borrar(completada);
             });
+            this.showAll();
         },
-        ordenHighToLow() {
-            this.notas.sort(function(a, b){return a - b});
-        },
-        ordenLowToHigh() {
-            this.notas.sort(function(a, b){return a - b});
-        },
-    },
-    computed: {
-        tareasPendientes() {
-            return this.notas.filter((not) => not.isCompletada == false).length
-        },
-        filtrarElementos() {
-            let arrayFiltrado = this.notas.filter((not) => (not.titulo.toLowerCase()).includes(this.campoFiltro.toLowerCase()));
-            arrayFiltrado.sort((a, b) => {
+        ordenar(array) {
+            array.sort((a, b) => {
                 if (a.prioridad < b.prioridad) {
                     return 1;
                 }
@@ -117,22 +107,27 @@ createApp({
                     return -1;
                 }
                 return 0;
-            })
-            return arrayFiltrado;
+            });
+            return array;
         },
-        ordenarPorPrioridad() {
-            switch (this.selected) {
-                case "Low":
-                    this.ordenLowToHigh();
-                    break;
-                case "Medium":
-                    this.ordenHighToLow();
-                    break;
-                case "High":
-                    this.ordenHighToLow();
-                    console.log("aaaaaaaaaa",this.selected);
-                    break;
+        filtrarElementos() {
+            let arrayFiltrado = this.notas.filter((not) => (not.titulo.toLowerCase()).includes(this.campoFiltro.toLowerCase()));
+            this.arrayFiltrado = this.ordenar(arrayFiltrado);
+        },
+        showAll(){            
+            this.arrayFiltrado = this.ordenar(this.notas);
+        }
+    },
+    computed: {
+        
+        filtrarPorPrioridad() {
+            let arrayFiltrado= this.notas;
+
+            if (this.prioSelected != 0) {
+                arrayFiltrado = this.notas.filter((not) => not.prioridad == parseInt(this.prioSelected));
             }
+            
+            this.arrayFiltrado = this.ordenar(arrayFiltrado);
         }
     }
 }).mount('#main')

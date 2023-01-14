@@ -62,15 +62,14 @@
         <section id="insert">
             <input type="text" name="textoNota" id="textoNota" placeholder="¿Qué quieres recordar?"
                 @keyup.enter="nuevaNota" v-model="texto">
-            <input type="text" name="textoFiltro" id="textoNota" placeholder="Filtrar por título" v-model="campoFiltro">
-            <div>Selected: {{ selected }}</div>
-
-            <select v-model="selected" @select="ordenarPorPrioridad">
-                <option disabled value="">Please select one</option>
-                <option>Low</option>
-                <option>Medium</option>
-                <option>High</option>
+            <input type="text" name="textoFiltro" id="textoNota" placeholder="Filtrar por título" v-model="campoFiltro" @keyup.enter="filtrarElementos()">
+            <select v-model="prioSelected" @select="filtrarPorPrioridad">
+                <option disabled value="">Filtrar por prioridad</option>
+                <option value="1">Low</option>
+                <option value="2">Medium</option>
+                <option value="3">High</option>
             </select>
+            <button @click="showAll()"> Ver todas</button>
         </section>
         <hr>
         <section id="tareas">
@@ -81,7 +80,7 @@
             <hr>
             <div id="listaTareas">
                 <ul>
-                    <li v-for="nota in filtrarElementos" v-bind:class="{completada:nota.isCompletada}"
+                    <li v-for="nota in arrayFiltrado" v-bind:class="{completada:nota.isCompletada}"
                         :key="nota.codigoNota">
                         <div class="tarea_main">
                             <i class="fa-regular fa-circle-check" v-if="nota.isCompletada" @click="unCheck(nota)"></i>
