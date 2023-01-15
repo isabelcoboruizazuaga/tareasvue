@@ -106,11 +106,7 @@ createApp({
     },
     computed: {
         tareasPendientes() {
-            try {
-                return this.notas.filter((not) => not.isCompletada == false).length
-            } catch (error) {
-                return 0;
-            }
+            return this.notas.filter((not) => not.isCompletada == false).length
         },
         filtrarPorPrioridad() {
             let arrayFiltrado = this.notas;
@@ -124,6 +120,6 @@ createApp({
     },
     created() {
         let lista = JSON.parse(window.localStorage.getItem("listaNotas"));
-        if (lista) this.notas = lista;
+        if (typeof this.notas !== 'null' && typeof this.notas !== 'undefined') this.notas = lista;
     }
 }).mount('body')
