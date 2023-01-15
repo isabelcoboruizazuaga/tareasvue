@@ -25,6 +25,10 @@ createApp({
             this.verEntrada = !this.verEntrada;
         },
         nuevaNota() {
+            if(typeof this.notas == 'null'){
+                this.notas=[];
+                arrayFiltrado=[];
+            }
             this.notas.push(
                 {
                     codigoNota: this.notas.length - 1,
