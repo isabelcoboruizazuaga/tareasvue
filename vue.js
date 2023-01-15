@@ -15,7 +15,11 @@ createApp({
     },
     methods: {
         muestraTareasTotales() {
-            return this.notas.length
+            try {
+                return this.notas.length
+            } catch (error) {
+                return 0;
+            }
         },
         cambiarVerEntrada() {
             this.verEntrada = !this.verEntrada;
@@ -94,9 +98,9 @@ createApp({
                 });
                 return array;
             } catch (error) {
-                
+
             }
-            
+
         },
         filtrarElementos() {
             let arrayFiltrado = this.notas.filter((not) => (not.titulo.toLowerCase()).includes(this.campoFiltro.toLowerCase()));
@@ -111,7 +115,7 @@ createApp({
     },
     computed: {
         tareasPendientes() {
-            try {                
+            try {
                 return this.notas.filter((not) => not.isCompletada == false).length
             } catch (error) {
                 return 0;
@@ -129,6 +133,10 @@ createApp({
     },
     created() {
         let lista = JSON.parse(window.localStorage.getItem("listaNotas"));
-        if (typeof this.notas !== 'null' && typeof this.notas !== 'undefined') this.notas = lista;
+        if (typeof this.notas !== 'null' && typeof this.notas !== 'undefined') {
+            this.notas = lista;
+        } else {
+            this.notas = [];
+        }
     }
 }).mount('body')
