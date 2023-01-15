@@ -71,7 +71,7 @@ createApp({
                 }
                 return not;
             })
-            
+
             this.actualizarStorage();
         },
         borrarCompletadas() {
@@ -100,13 +100,17 @@ createApp({
         showAll() {
             this.arrayFiltrado = this.ordenar(this.notas);
         },
-        actualizarStorage(){            
+        actualizarStorage() {
             window.localStorage.setItem("listaNotas", JSON.stringify(this.notas));
         }
     },
     computed: {
         tareasPendientes() {
-            return this.notas.filter((not) => not.isCompletada == false).length
+            try {
+                return this.notas.filter((not) => not.isCompletada == false).length
+            } catch (error) {
+                return 0;
+            }
         },
         filtrarPorPrioridad() {
             let arrayFiltrado = this.notas;
@@ -118,8 +122,8 @@ createApp({
             this.arrayFiltrado = this.ordenar(arrayFiltrado);
         }
     },
-    created(){
-        let lista= JSON.parse(window.localStorage.getItem("listaNotas"));
-        if(lista) this.notas=lista;
+    created() {
+        let lista = JSON.parse(window.localStorage.getItem("listaNotas"));
+        if (lista) this.notas = lista;
     }
 }).mount('body')
