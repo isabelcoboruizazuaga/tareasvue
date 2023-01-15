@@ -1,27 +1,3 @@
-const arrayNotas = [
-    {
-        codigoNota: 0,
-        titulo: "Hacer compra",
-        prioridad: 1,
-        fechaCreada: new Date(2011, 4, 14, 20, 21, 22),
-        isCompletada: false
-    },
-    {
-        codigoNota: 1,
-        titulo: "Recoger regalos",
-        prioridad: 2,
-        fechaCreada: new Date(),
-        isCompletada: false
-    },
-    {
-        codigoNota: 2,
-        titulo: "Revisar correo",
-        prioridad: 3,
-        fechaCreada: new Date(),
-        isCompletada: true
-    }
-]
-
 const { createApp } = Vue
 
 createApp({
@@ -32,8 +8,8 @@ createApp({
             campoFiltro: "",
             texto: "",
             prioSelected: "",
-            notas: JSON.parse(window.localStorage.getItem("listaNotas")),
-            arrayFiltrado: arrayNotas,
+            notas: [],
+            arrayFiltrado: this.notas,
             madeBy: "Isabel Cobo"
         }
     },
@@ -141,5 +117,9 @@ createApp({
 
             this.arrayFiltrado = this.ordenar(arrayFiltrado);
         }
+    },
+    created(){
+        let lista= JSON.parse(window.localStorage.getItem("listaNotas"));
+        if(lista) this.notas=lista;
     }
 }).mount('body')
