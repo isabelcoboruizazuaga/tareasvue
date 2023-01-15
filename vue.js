@@ -111,7 +111,11 @@ createApp({
     },
     computed: {
         tareasPendientes() {
-            return this.notas.filter((not) => not.isCompletada == false).length
+            try {                
+                return this.notas.filter((not) => not.isCompletada == false).length
+            } catch (error) {
+                return 0;
+            }
         },
         filtrarPorPrioridad() {
             let arrayFiltrado = this.notas;
