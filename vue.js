@@ -82,16 +82,21 @@ createApp({
             this.showAll();
         },
         ordenar(array) {
-            array.sort((a, b) => {
-                if (a.prioridad < b.prioridad) {
-                    return 1;
-                }
-                if (a.prioridad > b.prioridad) {
-                    return -1;
-                }
-                return 0;
-            });
-            return array;
+            try {
+                array.sort((a, b) => {
+                    if (a.prioridad < b.prioridad) {
+                        return 1;
+                    }
+                    if (a.prioridad > b.prioridad) {
+                        return -1;
+                    }
+                    return 0;
+                });
+                return array;
+            } catch (error) {
+                
+            }
+            
         },
         filtrarElementos() {
             let arrayFiltrado = this.notas.filter((not) => (not.titulo.toLowerCase()).includes(this.campoFiltro.toLowerCase()));
