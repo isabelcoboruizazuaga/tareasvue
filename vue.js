@@ -32,8 +32,8 @@ createApp({
             campoFiltro: "",
             texto: "",
             prioSelected: "",
+            notas: JSON.parse(window.localStorage.getItem("listaNotas")),
             arrayFiltrado: arrayNotas,
-            notas: arrayNotas,
             madeBy: "Isabel Cobo"
         }
     },
@@ -54,16 +54,21 @@ createApp({
                     isCompletada: false
                 })
             this.texto = "";
+
+            this.actualizarStorage();
         },
         borrar(nota) {
             this.notas = this.notas.filter(not => not !== nota);
+            this.actualizarStorage();
         },
         check(nota) {
             this.changeCheck(nota, true);
+            this.actualizarStorage();
         },
         unCheck(nota) {
             this.changeCheck(nota, false);
-        },changeCheck(nota, checked) {
+            this.actualizarStorage();
+        }, changeCheck(nota, checked) {
             this.notas = this.notas.map(not => {
                 if (not == nota) {
                     return {
@@ -90,6 +95,8 @@ createApp({
                 }
                 return not;
             })
+            
+            this.actualizarStorage();
         },
         borrarCompletadas() {
             let completadas = this.notas.filter(not => not.isCompletada == true);
@@ -114,21 +121,24 @@ createApp({
             let arrayFiltrado = this.notas.filter((not) => (not.titulo.toLowerCase()).includes(this.campoFiltro.toLowerCase()));
             this.arrayFiltrado = this.ordenar(arrayFiltrado);
         },
-        showAll(){            
+        showAll() {
             this.arrayFiltrado = this.ordenar(this.notas);
+        },
+        actualizarStorage(){            
+            window.localStorage.setItem("listaNotas", JSON.stringify(this.notas));
         }
     },
     computed: {
         tareasPendientes() {
             return this.notas.filter((not) => not.isCompletada == false).length
-        },        
+        },
         filtrarPorPrioridad() {
-            let arrayFiltrado= this.notas;
+            let arrayFiltrado = this.notas;
 
             if (this.prioSelected != 0) {
                 arrayFiltrado = this.notas.filter((not) => not.prioridad == parseInt(this.prioSelected));
             }
-            
+
             this.arrayFiltrado = this.ordenar(arrayFiltrado);
         }
     }
