@@ -6,11 +6,25 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Page Title</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+    <!--Iconos-->
     <script src="https://kit.fontawesome.com/ba0ac8d1c6.js" crossorigin="anonymous"></script>
 
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-</head>
+    <!--Bootstrap-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
+        integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
+        integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
+        crossorigin="anonymous"></script>
 
+    <!--Vue-->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+</head>
+<!--
 <style>
     li {
         display: flex;
@@ -53,59 +67,106 @@
 
     }
 </style>
+-->
+<style>
+    body {
+        padding: 1rem;
+    }
+    
+    li.completada h2 {
+        text-decoration: line-through;
+    }
 
-<body>
-    <header>
-        <h1>Ejercicio Vue.js- Isabel Cobo</h1>
-    </header>
-    <main id="main">
-        <section id="insert">
-            <input type="text" name="textoNota" id="textoNota" placeholder="¿Qué quieres recordar?"
+    .baja {
+        background-color: green;
+    }
+
+    .media {
+        background-color: blue;
+    }
+
+    .alta {
+        background-color: red;
+    }
+</style>
+
+<body class="bg-dark">
+    <div class="text-white">
+        <!----------Header----------->
+        <header class="row p-2">
+            <div class="col">
+                <h1>Ejercicio Vue.js- Isabel Cobo</h1>
+            </div>
+        </header>
+
+        <!-----SECCIÓN PRINCIPAL----->
+
+
+        <!--Acciones-->
+        <div class="row p-2">
+            <!--Nueva nota-->
+            <input class="col" type="text" name="textoNota" placeholder="¿Qué quieres recordar?"
                 @keyup.enter="nuevaNota" v-model="texto">
-            <input type="text" name="textoFiltro" id="textoNota" placeholder="Filtrar por título" v-model="campoFiltro" @keyup.enter="filtrarElementos()">
-            <select v-model="prioSelected" @select="filtrarPorPrioridad">
-                <option disabled value="">Filtrar por prioridad</option>
-                <option value="1">Low</option>
-                <option value="2">Medium</option>
-                <option value="3">High</option>
-            </select>
-            <button @click="showAll()"> Ver todas</button>
-        </section>
-        <hr>
-        <section id="tareas">
-            <div id="numTareasPendientes">
+
+
+            <!--Sección filtros-->
+            <div class="col offset-3" name="filtros">
+                <input class="col" type="text" name="textoFiltro" placeholder="Filtrar por título" v-model="campoFiltro"
+                    @keyup.enter="filtrarElementos()">
+                <select class="col" v-model="prioSelected" @select="filtrarPorPrioridad">
+                    <option disabled value="">Filtrar por prioridad</option>
+                    <option value="1">Prioridad baja</option>
+                    <option value="2">Prioridad media</option>
+                    <option value="3">Prioridad alta</option>
+                </select>
+                <button class="col" @click="showAll()"> Ver todas</button>
+            </div>
+        </div>
+
+        <!--Información-->
+        <div class="row ">
+            <hr>
+            <div class="col-2">
                 <p id="pendientes"> {{tareasPendientes}} tareas pendientes de un total de {{muestraTareasTotales()}}</p>
+            </div>
+            <div class="col-2">
                 <p id="borrarCompletadas" @click="borrarCompletadas()"> Borrar tareas completadas</p>
             </div>
             <hr>
-            <div id="listaTareas">
-                <ul>
-                    <li v-for="nota in arrayFiltrado" v-bind:class="{completada:nota.isCompletada}"
-                        :key="nota.codigoNota">
-                        <div class="tarea_main">
-                            <i class="fa-regular fa-circle-check" v-if="nota.isCompletada" @click="unCheck(nota)"></i>
-                            <i class="fa-regular fa-circle" @click="check(nota)" v-else></i>
-                            <h2>{{nota.titulo}}</h2>
-                            <i class="fa-solid fa-circle-minus" @click="borrar(nota)"></i>
+        </div>
+
+        <!--Lista Tareas-->
+        <div id="listaTareas" class="row">
+            <ul class="col">
+                <li class="row" v-for="nota in arrayFiltrado" v-bind:class="{completada:nota.isCompletada}"
+                    :key="nota.codigoNota">
+                    <div class="col">
+                        <div class="tarea_main row p-2 align-items-center">
+                            <i class="fa-regular fa-circle-check col-auto" v-if="nota.isCompletada" @click="unCheck(nota)"></i>
+                            <i class="fa-regular fa-circle col-auto" @click="check(nota)" v-else></i>
+                            <h2 class="col-auto">{{nota.titulo}}</h2>
+                            <i class="fa-solid fa-circle-minus col-auto" @click="borrar(nota)"></i>
                         </div>
-                        <div class="tarea_prioridad">
-                            <p>Prioridad: </p>
-                            <button :class="{baja:nota.prioridad==1}" @click="changePriority(nota,1)">Low</button>
-                            <button :class="{media:nota.prioridad==2}" @click="changePriority(nota,2)">Medium</button>
-                            <button :class="{alta:nota.prioridad==3}" @click="changePriority(nota,3)">High</button>
-                            <p>Añadido {{nota.fechaCreada}}</p>
+                        <div class="tarea_prioridad row align-items-baseline">
+                            <p class="col-auto">Prioridad: </p>
+                            <button class= "col-auto" :class="{baja:nota.prioridad==1} " @click="changePriority(nota,1)">Low</button>
+                            <button class= "col-auto" :class="{media:nota.prioridad==2}" @click="changePriority(nota,2)">Medium</button>
+                            <button class= "col-auto" :class="{alta:nota.prioridad==3}" @click="changePriority(nota,3)">High</button>
+                            <p class="col-auto">Añadido {{nota.fechaCreada}}</p>
                         </div>
-                    </li>
-                </ul>
-            </div>
-        </section>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <hr>
+
+
 
         <section id="madeBy">
             <p>Desarrollado por "{{madeBy}}"</p>
             <p>Código disponible en <a href="#">GitHub</a></p>
         </section>
-    </main>
-
+    </div>
 </body>
 
 <script src='vue.js'></script>

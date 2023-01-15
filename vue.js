@@ -119,7 +119,9 @@ createApp({
         }
     },
     computed: {
-        
+        tareasPendientes() {
+            return this.notas.filter((not) => not.isCompletada == false).length
+        },        
         filtrarPorPrioridad() {
             let arrayFiltrado= this.notas;
 
@@ -130,4 +132,4 @@ createApp({
             this.arrayFiltrado = this.ordenar(arrayFiltrado);
         }
     }
-}).mount('#main')
+}).mount('body')
